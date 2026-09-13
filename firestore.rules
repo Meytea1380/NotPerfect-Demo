@@ -1,0 +1,156 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Hardened Helpers
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email == "meitymohajeri@gmail.com") ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Diagnostics / Connection healthcheck
+    match /test/{testId} {
+      allow read: if true;
+    }
+
+    // Public User Profiles
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId) && isValidId(userId)
+        && incoming().id == userId
+        && incoming().name is string && incoming().name.size() <= 100
+        && incoming().username is string && incoming().username.size() <= 50
+        && (!('role' in incoming()) || incoming().role == 'user' || isAdmin());
+      allow update: if (isOwner(userId) || isAdmin())
+        && incoming().id == existing().id
+        && incoming().name is string && incoming().name.size() <= 100
+        && incoming().username is string && incoming().username.size() <= 50
+        && (!incoming().diff(existing()).affectedKeys().hasAny(['role']) || isAdmin());
+      allow delete: if isAdmin();
+
+      // PII & Sensitive Private Info (Split Collection)
+      match /private/info {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // Posts & Stories
+    match /posts/{postId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(postId)
+        && incoming().userId == request.auth.uid
+        && incoming().imageUrl is string && incoming().imageUrl.size() <= 2048
+        && incoming().caption is string && incoming().caption.size() <= 3000;
+      allow update: if (isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin()))
+        && incoming().userId == existing().userId;
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+
+      // Comments Subcollection (Master Gate)
+      match /comments/{commentId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn() && isValidId(commentId)
+          && exists(/databases/$(database)/documents/posts/$(postId))
+          && incoming().userId == request.auth.uid
+          && incoming().text is string && incoming().text.size() <= 1000;
+        allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin())
+          && incoming().userId == existing().userId;
+        allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      }
+    }
+
+    // Ephemeral Stories
+    match /stories/{storyId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(storyId)
+        && incoming().userId == request.auth.uid
+        && incoming().mediaUrl is string && incoming().mediaUrl.size() <= 2048;
+      allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin())
+        && incoming().userId == existing().userId;
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // Notes
+    match /notes/{noteId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(noteId)
+        && incoming().userId == request.auth.uid
+        && incoming().text is string && incoming().text.size() <= 280;
+      allow update: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin())
+        && incoming().userId == existing().userId;
+      allow delete: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    // Direct Messages (Privacy Protected: Only sender or recipient)
+    match /messages/{messageId} {
+      allow read: if isSignedIn() && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.receiverId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isSignedIn() && isValidId(messageId)
+        && incoming().senderId == request.auth.uid;
+      allow update: if isSignedIn() && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.receiverId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isSignedIn() && (
+        resource.data.senderId == request.auth.uid ||
+        isAdmin()
+      );
+    }
+
+    // Moderation Reports
+    match /reports/{reportId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.reporterId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(reportId)
+        && incoming().reporterId == request.auth.uid
+        && incoming().status == 'pending';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Age / Video Verifications
+    match /verifications/{verificationId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(verificationId)
+        && incoming().userId == request.auth.uid
+        && incoming().status == 'pending';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Admin List
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}

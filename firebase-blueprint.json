@@ -1,0 +1,515 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public user profile for community members",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "User ID matching auth UID",
+          "maxLength": 128
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the user",
+          "maxLength": 100
+        },
+        "username": {
+          "type": "string",
+          "description": "Unique handle",
+          "maxLength": 50,
+          "pattern": "^[a-zA-Z0-9_.]+$"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Avatar image URL or data URI",
+          "maxLength": 2048
+        },
+        "bio": {
+          "type": "string",
+          "description": "User biography",
+          "maxLength": 500
+        },
+        "badge": {
+          "type": "string",
+          "description": "Profile badge",
+          "maxLength": 50
+        },
+        "gender": {
+          "type": "string",
+          "description": "Gender identification",
+          "enum": ["female", "male", "other"]
+        },
+        "bodyStorySummary": {
+          "type": "string",
+          "description": "Personal body journey summary",
+          "maxLength": 1000
+        },
+        "role": {
+          "type": "string",
+          "description": "User role",
+          "enum": ["user", "moderator", "admin"]
+        },
+        "isAgeVerified": {
+          "type": "boolean",
+          "description": "Whether user is verified for +18 content"
+        },
+        "ageVerificationStatus": {
+          "type": "string",
+          "description": "Current status of age verification",
+          "enum": ["unverified", "pending", "verified", "rejected"]
+        },
+        "followersCount": {
+          "type": "number",
+          "description": "Number of followers"
+        },
+        "followingCount": {
+          "type": "number",
+          "description": "Number of accounts followed"
+        },
+        "postsCount": {
+          "type": "number",
+          "description": "Number of posts created"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation ISO timestamp"
+        }
+      },
+      "required": ["id", "name", "username", "createdAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Private user information isolated from public read",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "User email address",
+          "maxLength": 256
+        },
+        "authProvider": {
+          "type": "string",
+          "description": "Authentication provider method",
+          "enum": ["email", "google", "demo"]
+        },
+        "isBanned": {
+          "type": "boolean",
+          "description": "Banned account flag"
+        },
+        "warnings": {
+          "type": "string",
+          "description": "Moderator warning notes",
+          "maxLength": 1000
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last updated timestamp"
+        }
+      },
+      "required": ["email"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Community post celebrating authentic body journey",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique post ID",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "Author UID",
+          "maxLength": 128
+        },
+        "userName": {
+          "type": "string",
+          "description": "Author display name",
+          "maxLength": 100
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "Author avatar",
+          "maxLength": 2048
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Post image URL",
+          "maxLength": 2048
+        },
+        "caption": {
+          "type": "string",
+          "description": "Post caption",
+          "maxLength": 2000
+        },
+        "bodyJourney": {
+          "type": "string",
+          "description": "Detailed body acceptance narrative",
+          "maxLength": 3000
+        },
+        "tags": {
+          "type": "string",
+          "description": "Comma-separated or serialized tags",
+          "maxLength": 500
+        },
+        "isSensitive": {
+          "type": "boolean",
+          "description": "+18 sensitive content tag"
+        },
+        "moderationEnforced18": {
+          "type": "boolean",
+          "description": "Forced sensitive flag by moderation"
+        },
+        "isRemoved": {
+          "type": "boolean",
+          "description": "Whether post was removed by moderation"
+        },
+        "likesCount": {
+          "type": "number",
+          "description": "Total likes"
+        },
+        "hugCount": {
+          "type": "number",
+          "description": "Total cozy hugs"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "originalLanguage": {
+          "type": "string",
+          "description": "Original language code",
+          "maxLength": 10
+        }
+      },
+      "required": ["id", "userId", "imageUrl", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "Supportive comment under a post",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Comment ID",
+          "maxLength": 128
+        },
+        "postId": {
+          "type": "string",
+          "description": "Parent post ID",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "Commenter UID",
+          "maxLength": 128
+        },
+        "userName": {
+          "type": "string",
+          "description": "Commenter name",
+          "maxLength": 100
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "Commenter avatar",
+          "maxLength": 2048
+        },
+        "text": {
+          "type": "string",
+          "description": "Comment body",
+          "maxLength": 1000
+        },
+        "isRemoved": {
+          "type": "boolean",
+          "description": "Whether comment is hidden"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Comment creation timestamp"
+        }
+      },
+      "required": ["id", "postId", "userId", "text", "createdAt"]
+    },
+    "Story": {
+      "title": "Story",
+      "description": "Ephemeral cozy story",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Story ID",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "Author UID",
+          "maxLength": 128
+        },
+        "userName": {
+          "type": "string",
+          "description": "Author name",
+          "maxLength": 100
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "Author avatar",
+          "maxLength": 2048
+        },
+        "mediaUrl": {
+          "type": "string",
+          "description": "Media URL",
+          "maxLength": 2048
+        },
+        "caption": {
+          "type": "string",
+          "description": "Story caption",
+          "maxLength": 500
+        },
+        "isSensitive": {
+          "type": "boolean",
+          "description": "18+ content marker"
+        },
+        "isRemoved": {
+          "type": "boolean",
+          "description": "Moderator removal flag"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["id", "userId", "mediaUrl", "createdAt"]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "Micro-thought or mood note",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Note ID",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "description": "Author UID",
+          "maxLength": 128
+        },
+        "userName": {
+          "type": "string",
+          "description": "Author name",
+          "maxLength": 100
+        },
+        "userAvatar": {
+          "type": "string",
+          "description": "Author avatar",
+          "maxLength": 2048
+        },
+        "text": {
+          "type": "string",
+          "description": "Note content",
+          "maxLength": 280
+        },
+        "moodEmoji": {
+          "type": "string",
+          "description": "Mood emoji",
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["id", "userId", "text", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Direct message between two users",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Message ID",
+          "maxLength": 128
+        },
+        "senderId": {
+          "type": "string",
+          "description": "Sender UID",
+          "maxLength": 128
+        },
+        "receiverId": {
+          "type": "string",
+          "description": "Receiver UID",
+          "maxLength": 128
+        },
+        "text": {
+          "type": "string",
+          "description": "Message text content",
+          "maxLength": 2000
+        },
+        "mediaUrl": {
+          "type": "string",
+          "description": "Optional attachment URL",
+          "maxLength": 2048
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "Type of media",
+          "enum": ["image", "audio", "file"]
+        },
+        "read": {
+          "type": "boolean",
+          "description": "Whether message has been seen"
+        },
+        "isRemoved": {
+          "type": "boolean",
+          "description": "Flag if retracted or removed"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Message timestamp"
+        }
+      },
+      "required": ["id", "senderId", "receiverId", "createdAt"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Community moderation report",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Report ID",
+          "maxLength": 128
+        },
+        "reporterId": {
+          "type": "string",
+          "description": "Reporter UID",
+          "maxLength": 128
+        },
+        "reporterName": {
+          "type": "string",
+          "description": "Reporter display name",
+          "maxLength": 100
+        },
+        "targetType": {
+          "type": "string",
+          "description": "Target entity type",
+          "enum": ["post", "comment", "message", "user"]
+        },
+        "targetId": {
+          "type": "string",
+          "description": "ID of target element",
+          "maxLength": 128
+        },
+        "targetPreview": {
+          "type": "string",
+          "description": "Preview of reported content",
+          "maxLength": 500
+        },
+        "targetUserId": {
+          "type": "string",
+          "description": "Target account ID",
+          "maxLength": 128
+        },
+        "targetUserName": {
+          "type": "string",
+          "description": "Target account name",
+          "maxLength": 100
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason for violation report",
+          "enum": ["body_shaming", "harassment", "missing_18_tag", "unsolicited_explicit", "hate_speech", "other"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Additional context by reporter",
+          "maxLength": 1000
+        },
+        "status": {
+          "type": "string",
+          "description": "Moderation status",
+          "enum": ["pending", "reviewed", "resolved", "dismissed"]
+        },
+        "resolvedAction": {
+          "type": "string",
+          "description": "Action taken by moderator",
+          "enum": ["warn_user", "remove_content", "enforce_18_tag", "ban_user", "dismiss"]
+        },
+        "moderatorNotes": {
+          "type": "string",
+          "description": "Notes added by moderator",
+          "maxLength": 1000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Submission timestamp"
+        }
+      },
+      "required": ["id", "reporterId", "targetType", "targetId", "reason", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Public user profile documents"
+    },
+    "/users/{userId}/private/info": {
+      "schema": {
+        "$ref": "#/entities/UserPrivateInfo"
+      },
+      "description": "Private sensitive user info such as email and internal notes"
+    },
+    "/posts/{postId}": {
+      "schema": {
+        "$ref": "#/entities/Post"
+      },
+      "description": "Community posts with body stories"
+    },
+    "/posts/{postId}/comments/{commentId}": {
+      "schema": {
+        "$ref": "#/entities/Comment"
+      },
+      "description": "Subcollection of comments on each post"
+    },
+    "/stories/{storyId}": {
+      "schema": {
+        "$ref": "#/entities/Story"
+      },
+      "description": "Ephemeral stories"
+    },
+    "/notes/{noteId}": {
+      "schema": {
+        "$ref": "#/entities/Note"
+      },
+      "description": "User notes and mood thoughts"
+    },
+    "/messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/Message"
+      },
+      "description": "Direct messages between users"
+    },
+    "/reports/{reportId}": {
+      "schema": {
+        "$ref": "#/entities/Report"
+      },
+      "description": "Safety and moderation reports"
+    }
+  }
+}

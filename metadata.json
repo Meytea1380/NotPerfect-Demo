@@ -1,0 +1,11 @@
+{
+  "name": "NotPerfect",
+  "description": "A serene body-neutral sanctuary celebrating authentic, unretouched human reality without filters or judgment.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
