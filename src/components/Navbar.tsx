@@ -62,7 +62,8 @@ export const Navbar: React.FC<NavbarProps> = ({
       : 'Switch Active User:';
 
   return (
-    <header className="shrink-0 px-3.5 pt-[calc(0.625rem+env(safe-area-inset-top,0px))] pb-2.5 bg-[#14121d]/95 backdrop-blur-md border-b border-[#252033] flex items-center justify-between sticky top-0 z-30">
+    <header className="shrink-0 px-3.5 sm:px-6 pt-[calc(0.625rem+env(safe-area-inset-top,0px))] pb-2.5 bg-[#14121d]/95 backdrop-blur-md border-b border-[#252033] sticky top-0 z-30 w-full">
+      <div className="w-full max-w-4xl lg:max-w-5xl mx-auto flex items-center justify-between">
       {/* Brand Title with localized slogan */}
       <motion.div
         initial={{ opacity: 0, x: -10 }}
@@ -334,6 +335,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </AnimatePresence>
         </div>
+      </div>
       </div>
     </header>
   );

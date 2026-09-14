@@ -146,7 +146,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       />
 
       {/* Top Profile Bar with Username, Account Switcher Dropdown, and Hamburger Menu */}
-      <div className="px-4 py-3 bg-[#151320] border-b border-[#242033] flex items-center justify-between sticky top-0 z-20">
+      <div className="px-4 py-3 bg-[#151320] border-b border-[#242033] sticky top-0 z-20 w-full">
+        <div className="w-full max-w-2xl lg:max-w-3xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-sm font-bold text-[#f5f1fc] truncate max-w-[170px]">
             @{user.username}
@@ -183,6 +184,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             </button>
           </div>
         )}
+        </div>
       </div>
 
       {/* Animated Profile Content Canvas (Subtle slide-in for cozy feel) */}
@@ -197,7 +199,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           duration: 0.28,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="flex flex-col min-w-0"
+        className="flex flex-col min-w-0 w-full max-w-2xl lg:max-w-3xl mx-auto"
       >
         {/* Moderation Warnings Banner (Warm styling, no red) */}
       {user.warnings && user.warnings.length > 0 && (

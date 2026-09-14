@@ -187,79 +187,83 @@ export const ChatView: React.FC<ChatViewProps> = ({
     <div className="flex-1 flex flex-col bg-[#100f17] overflow-hidden">
       {/* If no partner selected, show conversation list & Instagram-like Notes tray */}
       {!activePartner ? (
-        <div className="flex-1 flex flex-col overflow-y-auto pb-16">
+        <div className="flex-1 flex flex-col overflow-y-auto pb-16 w-full">
           {/* Header */}
-          <div className="px-4 py-3 bg-[#151320] border-b border-[#252134] flex items-center justify-between sticky top-0 z-20">
-            <h2 className="text-sm font-bold text-[#eae5f5] flex items-center gap-2">
-              <span>{t.directMessagesTitle}</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#272136] text-[#e8a598] font-normal">
-                {chatPartners.length}
-              </span>
-            </h2>
-          </div>
-
-          {/* Instagram-style Notes Bar at the top of Direct Messages! */}
-          {onSaveNote && (
-            <div className="border-b border-[#231e30]">
-              <NotesBar
-                notes={notes}
-                currentUser={currentUser}
-                onSaveNote={onSaveNote}
-                lang={lang}
-                onSelectNoteUser={(user) => setActivePartner(user)}
-              />
-            </div>
-          )}
-
-          {/* Search bar */}
-          <div className="p-3">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#171524] border border-[#2b253b] text-xs text-[#cfcadb]">
-              <Search className="w-3.5 h-3.5 text-[#857e93]" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder={t.searchChatsPlaceholder}
-                className="w-full bg-transparent outline-none text-xs text-white placeholder:text-[#6f687e]"
-              />
+          <div className="px-4 py-3 bg-[#151320] border-b border-[#252134] sticky top-0 z-20 w-full">
+            <div className="w-full max-w-2xl lg:max-w-3xl mx-auto flex items-center justify-between">
+              <h2 className="text-sm font-bold text-[#eae5f5] flex items-center gap-2">
+                <span>{t.directMessagesTitle}</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#272136] text-[#e8a598] font-normal">
+                  {chatPartners.length}
+                </span>
+              </h2>
             </div>
           </div>
 
-          {/* Conversations List */}
-          <div className="px-3 space-y-2">
-            {filteredPartners.map(partner => (
-              <div
-                key={partner.id}
-                onClick={() => setActivePartner(partner)}
-                className="p-3 rounded-2xl bg-[#181624] border border-[#2b253b] hover:border-[#483d63] flex items-center justify-between cursor-pointer transition-all active:scale-[0.99]"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <img
-                      src={partner?.avatar || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80'}
-                      alt={partner?.name || ''}
-                      className="w-12 h-12 rounded-full object-cover border border-[#3b334f]"
-                      referrerPolicy="no-referrer"
-                    />
-                    <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#9bb39d] border-2 border-[#181624]" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-bold text-[#f2eef9]">{partner.name}</h3>
-                    <p className="text-[11px] text-[#9b93ab] max-w-[190px] truncate">
-                      {partner.bio}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-[#b5acc7]">
-                  {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-                </div>
+          <div className="w-full max-w-2xl lg:max-w-3xl mx-auto flex-1 flex flex-col">
+            {/* Instagram-style Notes Bar at the top of Direct Messages! */}
+            {onSaveNote && (
+              <div className="border-b border-[#231e30]">
+                <NotesBar
+                  notes={notes}
+                  currentUser={currentUser}
+                  onSaveNote={onSaveNote}
+                  lang={lang}
+                  onSelectNoteUser={(user) => setActivePartner(user)}
+                />
               </div>
-            ))}
+            )}
+
+            {/* Search bar */}
+            <div className="p-3">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-[#171524] border border-[#2b253b] text-xs text-[#cfcadb]">
+                <Search className="w-3.5 h-3.5 text-[#857e93]" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder={t.searchChatsPlaceholder}
+                  className="w-full bg-transparent outline-none text-xs text-white placeholder:text-[#6f687e]"
+                />
+              </div>
+            </div>
+
+            {/* Conversations List */}
+            <div className="px-3 space-y-2">
+              {filteredPartners.map(partner => (
+                <div
+                  key={partner.id}
+                  onClick={() => setActivePartner(partner)}
+                  className="p-3 rounded-2xl bg-[#181624] border border-[#2b253b] hover:border-[#483d63] flex items-center justify-between cursor-pointer transition-all active:scale-[0.99]"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <img
+                        src={partner?.avatar || 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80'}
+                        alt={partner?.name || ''}
+                        className="w-12 h-12 rounded-full object-cover border border-[#3b334f]"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#9bb39d] border-2 border-[#181624]" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-[#f2eef9]">{partner.name}</h3>
+                      <p className="text-[11px] text-[#9b93ab] max-w-[190px] truncate">
+                        {partner.bio}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 text-[#b5acc7]">
+                    {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       ) : (
         /* Active Conversation Screen */
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
+        <div className="flex-1 flex flex-col h-full overflow-hidden w-full max-w-2xl lg:max-w-3xl mx-auto">
           {/* Chat Header */}
           <div className="px-3.5 py-2.5 bg-[#161421] border-b border-[#2a2538] flex items-center justify-between">
             <div className="flex items-center gap-2">

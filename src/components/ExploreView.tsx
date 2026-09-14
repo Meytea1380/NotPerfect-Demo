@@ -122,7 +122,7 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
   }, [posts, selectedTag, searchQuery, currentLang]);
 
   return (
-    <div className="w-full max-w-full min-w-0 p-3 pb-24 space-y-4">
+    <div className="w-full max-w-3xl lg:max-w-4xl mx-auto min-w-0 p-3 sm:p-5 pb-24 space-y-4">
       {/* Search & Discovery Bar */}
       <div className="relative w-full max-w-full">
         <div className="absolute inset-y-0 right-3.5 rtl:right-3.5 ltr:left-3.5 flex items-center pointer-events-none text-[#8d83a1]">
@@ -262,7 +262,7 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
 
       {/* Filtered Grid Gallery */}
       {filteredPosts.length > 0 ? (
-        <div className="grid grid-cols-2 gap-2.5 w-full max-w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3.5 w-full max-w-full">
           {filteredPosts.map(post => {
             const localized = getLocalizedPost(post, currentLang);
             const isSensitiveLocked = post.isSensitive && !currentUser.isAgeVerified;

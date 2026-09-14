@@ -457,7 +457,7 @@ export default function App() {
   const isRtl = isRTL(language);
 
   return (
-    <div className="w-full h-[100dvh] min-h-[100dvh] bg-[#07060a] flex items-center justify-center p-0 text-[#ded8ea] font-sans antialiased selection:bg-[#7c4f62] selection:text-white overflow-hidden">
+    <div className="w-full h-[100dvh] min-h-[100dvh] bg-[#0c0a13] flex flex-col p-0 text-[#ded8ea] font-sans antialiased selection:bg-[#7c4f62] selection:text-white overflow-hidden">
       {/* Universal Mobile & Responsive Frame */}
       <AndroidFrame lang={language}>
         {!isLoggedIn ? (
@@ -510,7 +510,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                className="p-3 pb-16 flex-1"
+                className="p-3 pb-16 flex-1 w-full max-w-xl md:max-w-2xl lg:max-w-2xl mx-auto"
               >
                 <button
                   onClick={() => setSelectedPostDetail(null)}
@@ -636,7 +636,7 @@ export default function App() {
                 className="flex-1 flex flex-col min-h-0"
               >
               {activeTab === 'feed' && (
-                <div className="pb-16">
+                <div className="pb-16 w-full max-w-xl md:max-w-2xl lg:max-w-2xl mx-auto">
                   {/* Instagram-Style Grouped Stories */}
                   <StoryViewer
                     stories={stories}
