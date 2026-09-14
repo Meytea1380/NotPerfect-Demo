@@ -78,7 +78,7 @@ export const CallModal: React.FC<CallModalProps> = ({
   };
 
   return (
-    <div className="absolute inset-0 z-50 bg-[#09080e] flex flex-col justify-between overflow-hidden select-none animate-fadeIn">
+    <div className="fixed inset-0 z-50 bg-[#09080e] flex flex-col justify-between overflow-hidden select-none animate-fadeIn sm:max-w-md sm:mx-auto sm:my-auto sm:h-[94vh] sm:rounded-3xl sm:border sm:border-[#373048]">
       {/* Top Header */}
       <div className="pt-8 pb-4 px-6 flex items-center justify-between z-20 bg-gradient-to-b from-black/80 to-transparent">
         <div className="flex items-center gap-2">

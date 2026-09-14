@@ -457,8 +457,8 @@ export default function App() {
   const isRtl = isRTL(language);
 
   return (
-    <div className="min-h-screen bg-[#0d0c13] flex items-center justify-center p-0 sm:p-4 text-[#ded8ea] font-sans antialiased selection:bg-[#7c4f62] selection:text-white">
-      {/* Android Device Frame */}
+    <div className="w-full h-[100dvh] min-h-[100dvh] bg-[#07060a] flex items-center justify-center p-0 text-[#ded8ea] font-sans antialiased selection:bg-[#7c4f62] selection:text-white overflow-hidden">
+      {/* Universal Mobile & Responsive Frame */}
       <AndroidFrame lang={language}>
         {!isLoggedIn ? (
           /* Dedicated Clean & Minimal Login View as First Screen */

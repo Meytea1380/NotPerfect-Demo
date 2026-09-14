@@ -29,7 +29,7 @@ export const BottomNavigation: React.FC<BottomNavigationProps> = ({
   ];
 
   return (
-    <nav className="shrink-0 sticky bottom-0 z-30 bg-[#13111b]/95 backdrop-blur-md border-t border-[#262033]/80 px-2 py-1.5 flex items-center justify-around shadow-[0_-8px_20px_rgba(0,0,0,0.35)]">
+    <nav className="shrink-0 sticky bottom-0 z-30 bg-[#13111b]/95 backdrop-blur-md border-t border-[#262033]/80 px-2 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom,0px))] flex items-center justify-around shadow-[0_-8px_20px_rgba(0,0,0,0.35)]">
       {/* Home / Feed */}
       <motion.button
         whileTap={{ scale: 0.88 }}

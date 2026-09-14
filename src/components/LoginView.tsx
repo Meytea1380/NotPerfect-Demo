@@ -252,7 +252,7 @@ export const LoginView: React.FC<LoginViewProps> = ({
       className="w-full h-full min-h-0 flex-1 flex flex-col overflow-y-auto overflow-x-hidden bg-[#0c0a13] text-[#e6e0ef]"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
-      <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-between min-h-max space-y-4 p-4 sm:p-5 pb-20">
+      <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-between min-h-max space-y-4 p-4 sm:p-5 pt-[calc(1rem+env(safe-area-inset-top,0px))] pb-[calc(2.5rem+env(safe-area-inset-bottom,0px))]">
         {/* Top Ambient Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-44 bg-[#6e3e5f]/15 blur-3xl pointer-events-none" />
 

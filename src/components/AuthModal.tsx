@@ -242,7 +242,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     <AnimatePresence>
       <div
         id="auth-modal-overlay"
-        className="absolute inset-0 z-50 flex items-center justify-center p-3 bg-black/80 backdrop-blur-md overflow-y-auto"
+        className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto"
       >
         <motion.div
           id="auth-modal-dialog"
@@ -250,8 +250,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 16 }}
           transition={{ type: 'spring', damping: 26, stiffness: 320 }}
-          className="relative w-full max-w-sm my-auto bg-[#171422] border border-[#3e344e] rounded-3xl shadow-2xl p-4 sm:p-5 text-start max-h-[92%] overflow-y-auto no-scrollbar"
+          className="relative w-full sm:max-w-md my-0 sm:my-auto bg-[#171422] border-t sm:border border-[#3e344e] rounded-t-[28px] sm:rounded-3xl shadow-2xl p-4 sm:p-5 text-start max-h-[92dvh] overflow-y-auto no-scrollbar"
         >
+          {/* Mobile Drag Indicator */}
+          <div className="sm:hidden w-10 h-1 bg-[#4b435e] rounded-full mx-auto mb-2.5" />
           {/* Ambient organic aura */}
           <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#e8a598]/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-[#9bb39d]/10 rounded-full blur-3xl pointer-events-none" />

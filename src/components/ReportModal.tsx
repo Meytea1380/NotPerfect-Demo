@@ -100,8 +100,10 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   };
 
   return (
-    <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
-      <div className="w-full max-w-sm bg-[#181625] border border-[#3e3552] rounded-3xl p-4 shadow-2xl max-h-[92%] overflow-y-auto no-scrollbar">
+    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+      <div className="w-full sm:max-w-md bg-[#181625] border-t sm:border border-[#3e3552] rounded-t-[28px] sm:rounded-3xl p-4 sm:p-5 shadow-2xl max-h-[88dvh] overflow-y-auto no-scrollbar">
+        {/* Mobile Drag Indicator */}
+        <div className="sm:hidden w-10 h-1 bg-[#4b435e] rounded-full mx-auto mb-2.5" />
         {submitted ? (
           <div className="py-8 flex flex-col items-center justify-center text-center space-y-2">
             <div className="w-12 h-12 rounded-full bg-[#1e2a22] text-[#9bb39d] flex items-center justify-center border border-[#9bb39d]/40 shadow-lg">

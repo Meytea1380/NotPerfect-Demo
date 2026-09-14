@@ -44,7 +44,7 @@ export const AccountSwitcherSheet: React.FC<AccountSwitcherSheetProps> = ({
   return (
     <AnimatePresence>
       <div
-        className="absolute inset-0 z-50 flex flex-col justify-end bg-black/75 backdrop-blur-sm overflow-hidden select-none"
+        className="fixed inset-0 z-50 flex flex-col justify-end bg-black/80 backdrop-blur-sm overflow-hidden select-none"
         dir={isRtl ? 'rtl' : 'ltr'}
         onClick={onClose}
       >
@@ -55,7 +55,7 @@ export const AccountSwitcherSheet: React.FC<AccountSwitcherSheetProps> = ({
           exit={{ y: '100%' }}
           transition={{ type: 'spring', damping: 28, stiffness: 320 }}
           onClick={e => e.stopPropagation()}
-          className="w-full max-h-[85%] bg-[#151221] border-t border-[#342b47] rounded-t-[32px] p-5 shadow-2xl flex flex-col overflow-hidden text-[#ede8f5]"
+          className="w-full sm:max-w-md mx-auto max-h-[85dvh] bg-[#151221] border-t sm:border border-[#342b47] rounded-t-[32px] p-5 shadow-2xl flex flex-col overflow-hidden text-[#ede8f5]"
         >
           {/* Grab Handle */}
           <div className="w-12 h-1.5 rounded-full bg-[#3e3454] mx-auto mb-3 self-center shrink-0" />

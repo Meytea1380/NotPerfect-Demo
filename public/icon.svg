@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#231d2e" />
+      <stop offset="100%" stop-color="#0c0a13" />
+    </radialGradient>
+    <linearGradient id="roseGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5cec7" />
+      <stop offset="50%" stop-color="#e8a598" />
+      <stop offset="100%" stop-color="#c97b6d" />
+    </linearGradient>
+    <linearGradient id="kintsugi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbe29d" />
+      <stop offset="100%" stop-color="#e6c17b" />
+    </linearGradient>
+  </defs>
+  <!-- Background with subtle corner radius -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+  <!-- Protective Sanctuary Ring -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#roseGold)" stroke-width="12" stroke-dasharray="14 10" opacity="0.35" />
+  <!-- Heart Silhouette of Self-Compassion -->
+  <path d="M256 390 C256 390 130 300 130 205 C130 150 170 120 216 120 C242 120 256 140 256 140 C256 140 270 120 296 120 C342 120 382 150 382 205 C382 300 256 390 256 390 Z" fill="url(#roseGold)" opacity="0.9" />
+  <!-- Golden Kintsugi Repair Thread -->
+  <path d="M230 145 Q260 210 240 270 T275 350" fill="none" stroke="url(#kintsugi)" stroke-width="9" stroke-linecap="round" />
+</svg>

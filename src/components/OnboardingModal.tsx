@@ -143,13 +143,15 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   }[lang === 'fa' ? 'fa' : 'en'];
 
   return (
-    <div className="absolute inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 select-none">
+    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 select-none overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="w-full max-w-sm bg-[#161320] border border-[#3b324d] rounded-3xl p-4 sm:p-5 shadow-2xl flex flex-col max-h-[90%] overflow-y-auto no-scrollbar"
+        className="w-full sm:max-w-md bg-[#161320] border-t sm:border border-[#3b324d] rounded-t-[28px] sm:rounded-3xl p-4 sm:p-5 shadow-2xl flex flex-col max-h-[90dvh] overflow-y-auto no-scrollbar"
         dir={isRtlLang ? 'rtl' : 'ltr'}
       >
+        {/* Mobile Drag Indicator */}
+        <div className="sm:hidden w-10 h-1 bg-[#4b435e] rounded-full mx-auto mb-2.5" />
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-[#282236] mb-4">
           <div className="flex items-center gap-2.5">

@@ -34,7 +34,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ lang = 'en', onFinis
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 0.98 }}
       transition={{ duration: 0.45, ease: 'easeInOut' }}
-      className="absolute inset-0 z-[999] bg-[#0c0a13] flex flex-col items-center justify-center p-6 select-none overflow-hidden"
+      className="fixed inset-0 z-[999] bg-[#0c0a13] flex flex-col items-center justify-center p-6 select-none overflow-hidden"
     >
       {/* Living Ambient Light Motion & Particle Glow */}
       <AmbientLightMotion variant="splash" intensity="normal" />

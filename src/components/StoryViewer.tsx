@@ -296,9 +296,9 @@ export const StoryViewer: React.FC<StoryViewerProps> = ({
 
       {/* Full-Screen Instagram-Style Story Viewer Modal */}
       {activeGroup && currentStory && (
-        <div className="absolute inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade-in">
+        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center animate-fade-in">
           <div
-            className="relative w-full max-w-md h-full bg-[#0d0c13] flex flex-col justify-between overflow-hidden select-none"
+            className="relative w-full max-w-md h-full sm:h-[94vh] sm:max-h-[920px] sm:rounded-3xl sm:border sm:border-[#332b45] bg-[#0d0c13] flex flex-col justify-between overflow-hidden select-none"
             onMouseDown={() => setIsPaused(true)}
             onMouseUp={() => setIsPaused(false)}
             onTouchStart={() => setIsPaused(true)}
@@ -438,8 +438,10 @@ export const StoryViewer: React.FC<StoryViewerProps> = ({
 
       {/* Add Story Modal */}
       {showAddModal && (
-        <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 animate-fade-in">
-          <div className="w-full max-w-sm rounded-3xl bg-[#171422] border border-[#3e344e] p-4 text-right shadow-2xl max-h-[92%] overflow-y-auto no-scrollbar">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in overflow-y-auto">
+          <div className="w-full sm:max-w-md rounded-t-[28px] sm:rounded-3xl bg-[#171422] border-t sm:border border-[#3e344e] p-4 sm:p-5 text-right shadow-2xl max-h-[90dvh] overflow-y-auto no-scrollbar">
+            {/* Mobile Drag Indicator */}
+            <div className="sm:hidden w-10 h-1 bg-[#4b435e] rounded-full mx-auto mb-2.5" />
             <div className="flex items-center justify-between pb-3 border-b border-[#282236] mb-3">
               <button
                 onClick={() => setShowAddModal(false)}

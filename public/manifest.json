@@ -1,0 +1,20 @@
+{
+  "name": "NotPerfect — Raw Beauty, Unfiltered Reality",
+  "short_name": "NotPerfect",
+  "description": "A serene body-neutral sanctuary celebrating authentic, unretouched human reality without filters or judgment.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#0d0c15",
+  "theme_color": "#0d0c15",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "lifestyle", "health"]
+}

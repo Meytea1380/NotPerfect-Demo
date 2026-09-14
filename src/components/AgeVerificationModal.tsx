@@ -259,8 +259,10 @@ export const AgeVerificationModal: React.FC<AgeVerificationModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 animate-fade-in">
-      <div className="w-full max-w-sm rounded-3xl bg-[#171422] border border-[#3e344e] p-4 text-start shadow-2xl overflow-hidden relative max-h-[92%] overflow-y-auto no-scrollbar">
+    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto animate-fade-in">
+      <div className="w-full sm:max-w-md rounded-t-[28px] sm:rounded-3xl bg-[#171422] border-t sm:border border-[#3e344e] p-4 sm:p-5 text-start shadow-2xl overflow-hidden relative max-h-[90dvh] overflow-y-auto no-scrollbar">
+        {/* Mobile Drag Indicator */}
+        <div className="sm:hidden w-10 h-1 bg-[#4b435e] rounded-full mx-auto mb-2.5" />
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-[#282236]">
           <button
