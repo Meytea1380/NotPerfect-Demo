@@ -18,7 +18,6 @@ import {
 import { User, AppLanguage, AuthMode } from '../types';
 import { TRANSLATIONS } from '../services/i18n';
 import { StorageService } from '../services/storage';
-import { signInWithGoogle, FirebaseService } from '../services/firebase';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -109,24 +108,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     { name: 'نیلوفر پروانه', id: 'niloofar_raw', email: 'niloofar@notperfect.app', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80' },
   ];
 
-  // Firebase Google Sign In
+  // Google Sign In (Local & Storage authenticated)
   const handleGoogleSignIn = async (customEmail?: string, customName?: string) => {
     setErrorMsg(null);
     setGoogleConnecting(true);
 
     try {
-      let targetEmail = customEmail || 'meitymohajeri@gmail.com';
-      let targetName = customName || 'مهدی مهاجری';
-      let targetAvatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80';
-
-      try {
-        const fbUser = await signInWithGoogle();
-        if (fbUser.email) targetEmail = fbUser.email;
-        if (fbUser.displayName) targetName = fbUser.displayName;
-        if (fbUser.photoURL) targetAvatar = fbUser.photoURL;
-      } catch (authErr) {
-        console.warn('Firebase popup sign-in fallback:', authErr);
-      }
+      const targetEmail = customEmail || 'meitymohajeri@gmail.com';
+      const targetName = customName || (lang === 'fa' ? 'مهدی مهاجری' : 'Meity Mohajeri');
+      const targetAvatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80';
 
       const res = StorageService.loginWithGoogle({
         email: targetEmail,
@@ -134,25 +124,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         avatar: targetAvatar,
       });
 
-      if (res.success && res.user) {
-        FirebaseService.syncUserProfile(res.user).catch((err) =>
-          console.warn('Firebase user sync warning:', err)
-        );
-      }
-
       setGoogleConnecting(false);
-      setSuccessInfo({
-        user: res.user,
-        message: t.googleAuthSuccess,
-      });
+      if (res.success && res.user) {
+        setSuccessInfo({
+          user: res.user,
+          message: t.googleAuthSuccess,
+        });
 
-      setTimeout(() => {
-        onSuccess(res.user, 'google');
-        onClose();
-      }, 950);
+        setTimeout(() => {
+          onSuccess(res.user, 'google');
+          onClose();
+        }, 850);
+      }
     } catch {
       setGoogleConnecting(false);
-      setErrorMsg('خطا در اتصال به سرویس گوگل. لطفاً مجدداً امتحان کنید.');
+      setErrorMsg(
+        lang === 'fa'
+          ? 'خطا در اتصال به سرویس ورود. لطفاً مجدداً امتحان کنید.'
+          : 'Failed to connect. Please try again.'
+      );
     }
   };
 

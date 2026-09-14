@@ -21,7 +21,6 @@ import { StorageService } from '../services/storage';
 import { TRANSLATIONS, isRTL } from '../services/i18n';
 import { User as UserType, AppLanguage } from '../types';
 import { CozyBrandLogo } from './CozyBrandLogo';
-import { signInWithGoogle, FirebaseService } from '../services/firebase';
 
 interface LoginViewProps {
   currentLang: AppLanguage;
@@ -228,34 +227,21 @@ export const LoginView: React.FC<LoginViewProps> = ({
     }, 450);
   };
 
-  // Google Sign-In with Firebase Auth & Firestore Sync
+  // Google Sign-In (Local & Storage authenticated)
   const handleGoogleAuth = async () => {
     setIsLoading(true);
     setErrorMsg(null);
     try {
-      const fbUser = await signInWithGoogle();
-      const res = StorageService.loginWithGoogle({
-        email: fbUser.email || 'meitymohajeri@gmail.com',
-        name: fbUser.displayName || (currentLang === 'fa' ? 'مهدی مهاجری' : 'Meity Mohajeri'),
-        avatar: fbUser.photoURL || undefined,
-      });
-      if (res.success && res.user) {
-        // Asynchronously sync profile to Firestore
-        FirebaseService.syncUserProfile(res.user).catch((err) =>
-          console.warn('Firebase user sync non-blocking warning:', err)
-        );
-        onLoginSuccess(res.user);
-      }
-    } catch (popupErr) {
-      console.warn('Google popup auth error or closed, falling back gracefully:', popupErr);
       const res = StorageService.loginWithGoogle({
         email: 'meitymohajeri@gmail.com',
         name: currentLang === 'fa' ? 'مهدی مهاجری' : 'Meity Mohajeri',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
       });
       if (res.success && res.user) {
-        FirebaseService.syncUserProfile(res.user).catch(() => {});
         onLoginSuccess(res.user);
       }
+    } catch (err) {
+      console.warn('Google sign-in error:', err);
     } finally {
       setIsLoading(false);
     }

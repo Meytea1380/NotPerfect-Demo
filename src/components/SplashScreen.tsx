@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { AppLanguage } from '../types';
 import { CozyLogoMotion } from './CozyLogoMotion';
+import { AmbientLightMotion } from './AmbientLightMotion';
 
 interface SplashScreenProps {
   lang?: AppLanguage;
@@ -35,12 +36,11 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ lang = 'en', onFinis
       transition={{ duration: 0.45, ease: 'easeInOut' }}
       className="absolute inset-0 z-[999] bg-[#0c0a13] flex flex-col items-center justify-center p-6 select-none overflow-hidden"
     >
-      {/* Soft Ambient Background Glows */}
-      <div className="absolute w-80 h-80 rounded-full bg-[#7a4968]/20 blur-3xl pointer-events-none -top-10" />
-      <div className="absolute w-80 h-80 rounded-full bg-[#c78f82]/15 blur-3xl pointer-events-none -bottom-10" />
+      {/* Living Ambient Light Motion & Particle Glow */}
+      <AmbientLightMotion variant="splash" intensity="normal" />
 
       {/* Center Logo Motion */}
-      <div className="relative flex flex-col items-center justify-center">
+      <div className="relative z-10 flex flex-col items-center justify-center">
         {/* Pulsing Concentric Ripple Rings */}
         <motion.div
           animate={{

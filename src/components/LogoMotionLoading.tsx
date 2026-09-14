@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { AppLanguage } from '../types';
 import { CozyLogoMotion } from './CozyLogoMotion';
+import { AmbientLightMotion } from './AmbientLightMotion';
 
 interface LogoMotionLoadingProps {
   lang?: AppLanguage;
@@ -38,13 +39,12 @@ export const LogoMotionLoading: React.FC<LogoMotionLoadingProps> = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.35 }}
-      className="absolute inset-0 z-[998] bg-[#0c0a13]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 select-none"
+      className="absolute inset-0 z-[998] bg-[#0c0a13]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 select-none overflow-hidden"
     >
-      {/* Radiant cozy ambient glow */}
-      <div className="absolute w-72 h-72 rounded-full bg-[#7a4968]/25 blur-3xl pointer-events-none" />
-      <div className="absolute w-64 h-64 rounded-full bg-[#e8a598]/15 blur-3xl pointer-events-none -bottom-8" />
+      {/* Living Ambient Light Motion & Dust Embers */}
+      <AmbientLightMotion variant="loading" intensity="soft" />
 
-      <div className="relative flex flex-col items-center">
+      <div className="relative z-10 flex flex-col items-center">
         {/* Soft expanding concentric pulse ring */}
         <motion.div
           animate={{

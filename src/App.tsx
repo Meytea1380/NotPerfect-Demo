@@ -19,8 +19,6 @@ import { LoginView } from './components/LoginView';
 import { OnboardingModal } from './components/OnboardingModal';
 import { StorageService } from './services/storage';
 import { TRANSLATIONS, isRTL } from './services/i18n';
-import { FirebaseService, auth } from './services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 import {
   User,
   Post,
@@ -198,28 +196,6 @@ export default function App() {
 
   useEffect(() => {
     loadAllData();
-
-    // Firebase Auth State Listener
-    const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
-      if (fbUser) {
-        console.log('Firebase user authenticated:', fbUser.email);
-        const activeUsers = StorageService.getActiveUsers();
-        const current = StorageService.getCurrentUser();
-        if (fbUser.email && (!current || current.email !== fbUser.email)) {
-          const res = StorageService.loginWithGoogle({
-            email: fbUser.email,
-            name: fbUser.displayName || 'Meity Mohajeri',
-            avatar: fbUser.photoURL || undefined,
-          });
-          if (res.success && res.user) {
-            loadAllData();
-            setIsLoggedIn(true);
-          }
-        }
-      }
-    });
-
-    return () => unsubscribe();
   }, []);
 
   const handleLanguageChange = (newLang: AppLanguage) => {
@@ -292,9 +268,6 @@ export default function App() {
   const handleUpdateProfile = (updatedFields: Partial<User>) => {
     if (!currentUser) return;
     const updated = StorageService.updateUserProfile(updatedFields);
-    FirebaseService.syncUserProfile(updated).catch(err =>
-      console.warn('Firebase user sync non-blocking:', err)
-    );
     setCurrentUser(updated);
     setUsers(StorageService.getUsers());
   };
@@ -303,10 +276,7 @@ export default function App() {
   const handleCreatePost = (
     newPostData: Omit<Post, 'id' | 'createdAt' | 'likesCount' | 'hugCount' | 'reactions' | 'userReactions' | 'comments'>
   ) => {
-    const created = StorageService.createPost(newPostData);
-    FirebaseService.savePost(created).catch(err =>
-      console.warn('Firebase post sync non-blocking:', err)
-    );
+    StorageService.createPost(newPostData);
     setPosts(StorageService.getPosts());
     setIsCreateModalOpen(false);
     setActiveTab('feed');
@@ -315,10 +285,7 @@ export default function App() {
   // Add Story
   const handleAddStory = (imageUrl: string) => {
     if (!currentUser) return;
-    const created = StorageService.addStory(imageUrl);
-    FirebaseService.saveStory(created).catch(err =>
-      console.warn('Firebase story sync non-blocking:', err)
-    );
+    StorageService.addStory(imageUrl);
     setStories(StorageService.getStories());
   };
 
