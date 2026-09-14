@@ -1,3 +1,14 @@
+/**
+ * @file App.tsx
+ * @description Main Application Controller for NotPerfect.
+ * Orchestrates:
+ * - Reactive state management (Users, Posts, Stories, Notes, Reports)
+ * - Navigation tab routing (Feed, Explore, Create, Messages, Profile, Settings)
+ * - Modals lifecycle (Age Verification, Report, Call, Onboarding, Authentication)
+ * - Splash screen and smooth loading transitions with ambient lighting
+ * - Bidirectional layout direction handling (RTL / LTR)
+ */
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AndroidFrame } from './components/AndroidFrame';
@@ -19,6 +30,7 @@ import { LoginView } from './components/LoginView';
 import { OnboardingModal } from './components/OnboardingModal';
 import { StorageService } from './services/storage';
 import { TRANSLATIONS, isRTL } from './services/i18n';
+import { AdminApiClient } from './services/adminApi';
 import {
   User,
   Post,
@@ -35,6 +47,9 @@ import {
 } from './types';
 import { ArrowRight, Sparkles, Shield, Lock, ShieldCheck } from 'lucide-react';
 
+/**
+ * Root Application Component.
+ */
 export default function App() {
   // Application Data States
   const [users, setUsers] = useState<Record<string, User>>(() => StorageService.getUsers());
@@ -72,6 +87,8 @@ export default function App() {
   const handleLoginSuccessFromView = (user: User) => {
     setPendingAuthUser(user);
     setShowPostAuthLoading(true);
+    // Transmit login event to Admin Panel
+    AdminApiClient.syncUserProfile(user, 'login');
   };
 
   // Called after basic sign up boxes to start asking mandatory/optional profile questions
@@ -86,6 +103,8 @@ export default function App() {
       setOnboardingUser(null);
       setPendingAuthUser(updated);
       setShowPostAuthLoading(true);
+      // Sync complete profile to Admin Panel
+      AdminApiClient.syncUserProfile(updated, 'registered');
     }
   };
 
@@ -196,6 +215,10 @@ export default function App() {
 
   useEffect(() => {
     loadAllData();
+    // Flush any pending offline events to the Admin Panel upon initialization
+    AdminApiClient.flushOfflineQueue().catch(err => {
+      console.warn('[AdminAPI] Offline queue auto-flush encountered error:', err);
+    });
   }, []);
 
   const handleLanguageChange = (newLang: AppLanguage) => {
@@ -264,29 +287,43 @@ export default function App() {
     }
   };
 
-  // Update Profile
+  /**
+  * Update current user profile fields and synchronize to Admin Panel.
+  */
   const handleUpdateProfile = (updatedFields: Partial<User>) => {
     if (!currentUser) return;
     const updated = StorageService.updateUserProfile(updatedFields);
     setCurrentUser(updated);
     setUsers(StorageService.getUsers());
+    // Dispatch updated profile telemetry to Admin Panel
+    AdminApiClient.syncUserProfile(updated, 'profile_updated');
   };
 
-  // Create Post
+  /**
+  * Create a new natural post and dispatch to Admin Panel content audit stream.
+  */
   const handleCreatePost = (
     newPostData: Omit<Post, 'id' | 'createdAt' | 'likesCount' | 'hugCount' | 'reactions' | 'userReactions' | 'comments'>
   ) => {
-    StorageService.createPost(newPostData);
+    const created = StorageService.createPost(newPostData);
     setPosts(StorageService.getPosts());
     setIsCreateModalOpen(false);
     setActiveTab('feed');
+    // Dispatch publication audit event to Admin Panel
+    if (currentUser) {
+      AdminApiClient.dispatchContentPublication('post', created, currentUser);
+    }
   };
 
-  // Add Story
+  /**
+  * Add a 24-hour body journey story and dispatch to Admin Panel audit stream.
+  */
   const handleAddStory = (imageUrl: string) => {
     if (!currentUser) return;
-    StorageService.addStory(imageUrl);
+    const created = StorageService.addStory(imageUrl);
     setStories(StorageService.getStories());
+    // Dispatch story publication to Admin Panel
+    AdminApiClient.dispatchContentPublication('story', created, currentUser);
   };
 
   // Reply to Story
@@ -308,8 +345,27 @@ export default function App() {
     );
   };
 
-  // Age Verification Success
-  const handleAgeVerified = () => {
+  /**
+  * Handle age verification completion and dispatch record to Admin Panel.
+  */
+  const handleAgeVerified = (
+    method: 'google' | 'video' = 'google',
+    details?: { snapshotUrl?: string; phrase?: string; code?: string }
+  ) => {
+    if (currentUser) {
+      if (method === 'video' && details) {
+        const verif = StorageService.submitVideoVerification({
+          snapshotUrl: details.snapshotUrl,
+          randomPhrase: details.phrase || '',
+          verificationCode: details.code || '',
+        });
+        AdminApiClient.dispatchAgeVerificationSubmission(verif, currentUser);
+      } else {
+        StorageService.setAgeVerified(currentUser.id, true, 'google');
+        const updated = StorageService.getCurrentUser();
+        AdminApiClient.syncUserProfile(updated, 'profile_updated');
+      }
+    }
     loadAllData();
     setIsAgeModalOpen(false);
     setGlobalNotification('سن شما با موفقیت تایید شد! دسترسی کامل به تصاویر طبیعی فعال گردید ✨');
@@ -351,6 +407,9 @@ export default function App() {
     });
   };
 
+  /**
+   * Submit trust & safety violation report and dispatch to Admin Panel moderation queue.
+   */
   const handleSubmitReport = (params: {
     targetType: ReportTargetType;
     targetId: string;
@@ -361,7 +420,7 @@ export default function App() {
     details: string;
   }) => {
     if (!currentUser) return;
-    StorageService.submitReport({
+    const createdReport = StorageService.submitReport({
       targetType: params.targetType,
       targetId: params.targetId,
       targetPreview: params.targetPreview,
@@ -374,6 +433,9 @@ export default function App() {
     setReportModalState(prev => ({ ...prev, isOpen: false }));
     setGlobalNotification('گزارش شما برای هیئت نظارت و بررسی ارسال شد. از محافظت از فضای امن تن‌ها سپاسگزاریم 🕊️');
     setTimeout(() => setGlobalNotification(null), 4000);
+
+    // Transmit report payload to centralized Admin Panel
+    AdminApiClient.dispatchReport(createdReport, currentUser);
   };
 
   // Reset Demo Data

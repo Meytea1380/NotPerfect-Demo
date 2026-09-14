@@ -1,3 +1,14 @@
+/**
+ * @file storage.ts
+ * @description Client-side persistence and data service for NotPerfect.
+ * Provides resilient, typed localStorage CRUD operations for:
+ * - User authentication, multiple accounts, and profile editing
+ * - Ethical age-verification records (+18 content gate)
+ * - Posts, stories, mood notes, and private direct messages
+ * - Empathetic reactions (hug, love, courage, peace, bloom)
+ * - Trust & Safety community reports and moderation actions
+ */
+
 import {
   Post,
   User,
@@ -22,6 +33,9 @@ import {
   INITIAL_MESSAGES,
 } from '../data/initialData';
 
+/**
+ * Versioned localStorage keys to isolate cache updates and avoid cross-version conflicts.
+ */
 const STORAGE_KEYS = {
   POSTS: 'notperfect_posts_v2',
   STORIES: 'notperfect_stories_v2',

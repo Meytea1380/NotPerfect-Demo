@@ -1,3 +1,17 @@
+/**
+ * @file i18n.ts
+ * @description Internationalization (i18n) and localization dictionary for NotPerfect.
+ * Supports 5 languages:
+ * - English ('en') — LTR
+ * - Persian ('fa') — RTL
+ * - Spanish ('es') — LTR
+ * - Arabic ('ar') — RTL
+ * - French ('fr') — LTR
+ *
+ * Provides bidirectional layout helpers (isRTL), multilingual tag discovery,
+ * and localized date/time formatting.
+ */
+
 import { AppLanguage } from '../types';
 
 export interface Translations {
